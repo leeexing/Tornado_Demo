@@ -1,0 +1,8 @@
+.vscode/
+__pycache__
+log.log
+.qiniu_*
+*.rdb
+venv/
+test/
+log/
