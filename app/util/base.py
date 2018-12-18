@@ -6,6 +6,7 @@ import redis
 import torndb
 from tornado.web import RequestHandler, Application
 from .session import Session
+import app.conf as config
 
 
 class Application(Application):
@@ -16,10 +17,10 @@ class Application(Application):
         super(Application, self).__init__(*args, **kwargs)
 
         # 构造数据库连接对象
-        self.db = torndb.Connection(**config.mysql_options)
+        self.db = torndb.Connection(**config.MYSQL_OPTIONS)
 
         # 构造redis连接实例
-        self.redis = redis.StrictRedis(**config.redis_options)
+        self.redis = redis.StrictRedis(**config.REDIS_OPTIONS)
 
 
 class BaseHandler(RequestHandler):
@@ -54,3 +55,11 @@ class BaseHandler(RequestHandler):
             self.json_args = json.loads(self.request.body)
         else:
             self.json_args = None
+
+    def data_received(self, chunk):
+        """Implement this method to handle streamed request data.
+
+        Requires the `.stream_request_body` decorator.
+        """
+        print('好像用不着这个方法', chunk)
+        return chunk
