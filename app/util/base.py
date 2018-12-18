@@ -3,13 +3,13 @@
 
 import json
 import redis
-import torndb
-from tornado.web import RequestHandler, Application
+# import torndb
+import tornado.web
 from .session import Session
 import app.conf as config
 
 
-class Application(Application):
+class Application(tornado.web.Application):
     """定制的Application，用来补充db数据库实例"""
 
     def __init__(self, *args, **kwargs):
@@ -17,13 +17,13 @@ class Application(Application):
         super(Application, self).__init__(*args, **kwargs)
 
         # 构造数据库连接对象
-        self.db = torndb.Connection(**config.MYSQL_OPTIONS)
+        # self.db = torndb.Connection(**config.MYSQL_OPTIONS)
 
         # 构造redis连接实例
         self.redis = redis.StrictRedis(**config.REDIS_OPTIONS)
 
 
-class BaseHandler(RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
 
     @property
     def db(self):
@@ -40,21 +40,28 @@ class BaseHandler(RequestHandler):
         判断用户登录是否成功
         :return: 登陆成功返回用户的昵称，否则返回None
         """
-        self.session = Session(self)
-        return self.session.data.get("name")
+        # self.session = Session(self)
+        self.session = {
+            'data': {
+                'name': 'leeing',
+                'sex': 'superman',
+                'emial': '123456789.qq.com'
+            }
+        }
+        return self.session['data'].get("name")
 
     def get_user_locale(self):
         pass
 
-    def set_default_headers(self):
-        """设置默认的响应报文中的header，默认返回json格式数据"""
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
+    # def set_default_headers(self):
+    #     """设置默认的响应报文中的header，默认返回json格式数据. 加上这个之后好像返回的数据有点固定"""
+    #     self.set_header("Content-Type", "application/json; charset=UTF-8")
 
     def prepare(self):
         if self.request.headers.get('Content-Type', '').startswith('application/json'):
             self.json_args = json.loads(self.request.body)
         else:
-            self.json_args = None
+            self.json_args = {}
 
     def data_received(self, chunk):
         """Implement this method to handle streamed request data.
@@ -63,3 +70,10 @@ class BaseHandler(RequestHandler):
         """
         print('好像用不着这个方法', chunk)
         return chunk
+
+
+class PageNotFoundHandler(tornado.web.RequestHandler):
+    def get(self):
+        raise tornado.web.HTTPError(404)
+
+tornado.web.ErrorHandler = PageNotFoundHandler

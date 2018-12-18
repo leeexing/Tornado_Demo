@@ -4,7 +4,7 @@
 import logging
 import json
 import uuid
-import constants
+# import constants
 
 
 class Session(object):
@@ -38,7 +38,8 @@ class Session(object):
         # 将session_data序列化为json字符串
         json_data = json.dumps(self.data)
         try:
-            self.request_handler.redis.setex("sess_{}".format(self.sid), constants.SESSION_REDIS_EXPIRES, json_data)
+            self.request_handler.redis.setex("sess_{}".format(self.sid), 200, json_data)
+            # self.request_handler.redis.setex("sess_{}".format(self.sid), constants.SESSION_REDIS_EXPIRES, json_data)
         except Exception as e:
             logging.error(e)
             raise e

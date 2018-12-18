@@ -22,7 +22,7 @@ API_URLS = [
     (r'^/api/user$', user.UserHandler),
 
     # 图像
-    (r'^/api/image$', image.ImageHandle),
+    (r'^/api/image$', image.ImageHandler),
 
     # 其他
     (r'^/api/home$', home.MainHandler),
@@ -34,5 +34,5 @@ URLS = []
 URLS.extend(API_URLS)
 URLS.extend([
     (r"^/(.*?)$", StaticFileHandler,
-      {'path': os.path.join(os.path.dirname(__file__), 'template'), 'default_name': 'index.html'})
+      {'path': os.path.join(os.path.dirname(__file__), 'template'), 'default_filename': 'index.html'})
 ])
