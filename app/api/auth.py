@@ -12,12 +12,9 @@ class RegisterHandler(BaseHandler):
 
 class LoginHandler(BaseHandler):
 
-    def get(self):
-        items = ['item1', 'item2', 'item3']
-        self.render('base.html', title='Tornado', items=items)
-
     def post(self):
-        pass
+        items = ['item1', 'item2', 'item3']
+        self.write(items)
 
 
 class LogoutHandler(BaseHandler):

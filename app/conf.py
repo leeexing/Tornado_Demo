@@ -7,11 +7,12 @@ import os
 SETTINGS = {
     # 'debug': True, # 在debug模式下, 某些错误(例如import的时候有语法错误)会导致服务 关闭, 并且无法自动恢复.
     'autoreload': True, # 应用程序将会观察它的源文件是否改变, 并且当任何 文件改变的时候便重载它自己. 这减少了在开发中需要手动重启服务的需求
+    'static_path': os.path.join(os.path.dirname(__file__), 'static'),
     'template_path': os.path.join(os.path.dirname(__file__), 'template'),
     'compiled_template_cache': False,
     'cookie_secret': '61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o',
     'xsrf_cookies': True,
-    'login_url': 'login'
+    'login_url': 'login', # 有权限验证的路由没有通过验证会跳转到此路由下
 }
 
 # mysql配置

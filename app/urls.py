@@ -5,6 +5,7 @@ import os
 
 from tornado.web import StaticFileHandler
 from app.api import auth, home, image, user
+from app.view import CLIENT_URLS
 
 
 API_URLS = [
@@ -28,10 +29,12 @@ API_URLS = [
     (r'^/api/home$', home.MainHandler),
     (r'^/api/factorial$', home.FactorialHandler),
     (r'^/api/test$', home.TestHandler),
+
 ]
 
 URLS = []
 URLS.extend(API_URLS)
+URLS.extend(CLIENT_URLS)
 URLS.extend([
     (r"^/(.*?)$", StaticFileHandler,
       {'path': os.path.join(os.path.dirname(__file__), 'template'), 'default_filename': 'index.html'})

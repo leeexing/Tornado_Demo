@@ -53,15 +53,15 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_user_locale(self):
         pass
 
-    # def set_default_headers(self):
-    #     """设置默认的响应报文中的header，默认返回json格式数据. 加上这个之后好像返回的数据有点固定"""
-    #     self.set_header("Content-Type", "application/json; charset=UTF-8")
-
     def prepare(self):
         if self.request.headers.get('Content-Type', '').startswith('application/json'):
             self.json_args = json.loads(self.request.body)
         else:
             self.json_args = {}
+
+    # def set_default_headers(self):
+    #     """设置默认的响应报文中的header，默认返回json格式数据. 加上这个之后好像返回的数据有点固定"""
+    #     self.set_header("Content-Type", "application/json; charset=UTF-8")
 
     def data_received(self, chunk):
         """Implement this method to handle streamed request data.
