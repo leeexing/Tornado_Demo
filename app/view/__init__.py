@@ -10,5 +10,6 @@ CLIENT_URLS = [
     (r'^/image$', ImageViewer),
     (r'^/about$', AboutMeViewer),
     (r'^/user$', UserViewer),
+    (r'^/user/add$', UserAddViewer),
     (r'^/$', IndexViewer),
 ]

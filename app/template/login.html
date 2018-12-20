@@ -4,20 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>{{title}}</title>
+    <title>LOGIN</title>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container" style="margin-top: 150px;">
         <div class="logo-bar text-center"><a href="/"><img style="width: 200px;margin-bottom: 20px;" src="https://cn.bing.com/az/hprichbg/rb/MuranoChristmas_ZH-CN11783971861_1920x1080.jpg"></a></div>
-        <form class="form-login">
+        <form class="form-login" name="loginForm">
             <div class="form-group form-group-lg">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-user fa-lg fa-fw"></i></div>
-                    <input type="number" class="form-control" name="mobile" id="mobile" placeholder="手机号" required>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="用户名" required>
                 </div>
             </div>
-            <div class="error-msg" id="mobile-err"><i class="fa fa-exclamation-circle"></i><span></span></div>
+            <div class="error-msg" id="username-err"><i class="fa fa-exclamation-circle"></i><span></span></div>
             <div class="form-group form-group-lg">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-lock fa-lg fa-fw"></i></div>
@@ -25,9 +25,40 @@
                 </div>
             </div>
             <div class="error-msg" id="password-err"><i class="fa fa-exclamation-circle"></i><span></span></div>
-            <button type="submit" class="btn btn-lg btn-theme btn-block">登录</button>
+            <!-- <button id="login" class="btn btn-lg btn-theme btn-block">登录</button> -->
             <p class="register-a">没有账号，<a href="/register.html">立即注册</a></p>
         </form>
+        <button id="login" class="btn btn-lg btn-theme btn-block">登录</button>
     </div>
+
+    <script>
+        let login = document.getElementById('login')
+        login.onclick=() => {
+            let username = loginForm.username.value
+            let password = loginForm.password.value
+            console.log(username, 8989)
+            let opts = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }
+            console.log('什么回事')
+            fetch('http://localhost:8888/api/login', opts)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data, 'login.html ~~~')
+                    if(data.result) {
+                        console.log(555555)
+                        location.href = 'http://localhost:8888/api/home'
+                    }
+                })
+        }
+    </script>
 </body>
 </html>

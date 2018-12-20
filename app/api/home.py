@@ -6,6 +6,7 @@ import redis
 import tornado.web
 from tornado import gen
 from tornado.httpclient  import AsyncHTTPClient
+from app.util.base import BaseHandler
 
 
 @gen.coroutine
@@ -21,10 +22,11 @@ async def test_async(url):
     return response.body
 
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(BaseHandler):
     @tornado.web.authenticated
     @gen.coroutine
     def get(self):
+        print('homemmmmmmmmmmmmm')
         if not self.get_secure_cookie('tornado_cookie'):
             self.set_secure_cookie('tornado_cookie', 'black_friday')
             self.write('Your cookie was not set yet~')
@@ -35,7 +37,7 @@ class MainHandler(tornado.web.RequestHandler):
 
     # - 或者
     async def post(self):
-        data = await fetch_coroutine('http://www.leeing.cn:5280')
+        data = await test_async('http://www.leeing.cn:5280')
         self.write(data)
 
 
@@ -55,7 +57,7 @@ class FactorialService:
         return s, False
 
 
-class FactorialHandler(tornado.web.RequestHandler):
+class FactorialHandler(BaseHandler):
 
     service = FactorialService()
 
@@ -67,13 +69,18 @@ class FactorialHandler(tornado.web.RequestHandler):
             'fact': fact,
             'cached': cached
         }
-        self.set_header('Content-Type', 'application/json; charset=UTF-8')
+        # self.set_header('Content-Type', 'application/json; charset=UTF-8')
         self.write(json.dumps(result))
 
 
-class TestHandler(tornado.web.RequestHandler):
+class TestHandler(BaseHandler):
+    """简单的测试接口"""
     def get(self):
-        self.write({'name': 'nana', 'data': [1256,45, 89]})
+        self.redirect(self.get_argument('next', u'/api/factorial?n=10'))
+        # self.redirect(self.get_argument('next', u'/api/home'))
+        # self.write({'name': 'nana', 'data': [1256, 45, 89]})
 
     def post(self):
-        self.write({'name': 'leeing', 'data': [12,45, 89]})
+        print('TEST ---- ')
+        self.redirect(self.get_argument('next', u'/api/home'))
+        # self.write({'name': 'leeing', 'data': [12, 45, 89]})

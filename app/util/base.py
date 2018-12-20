@@ -4,7 +4,7 @@
 import json
 import redis
 # import torndb
-import tornado.web
+import tornado
 from .session import Session
 import app.conf as config
 
@@ -41,17 +41,20 @@ class BaseHandler(tornado.web.RequestHandler):
         :return: 登陆成功返回用户的昵称，否则返回None
         """
         # self.session = Session(self)
-        self.session = {
-            'data': {
-                'name': 'leeing',
-                'sex': 'superman',
-                'emial': '123456789.qq.com'
-            }
-        }
-        return self.session['data'].get("name")
+        user_json = self.get_secure_cookie('user')
+        print(user_json, '--base : user_json'*2)
+        if user_json:
+            return tornado.escape.json_decode(user_json)
+        else:
+            return None
 
-    def get_user_locale(self):
-        pass
+    # def get_user_locale(self):
+    #     user_json = self.get_secure_cookie('user')
+    #     print(user_json, '=+'*20)
+    #     if user_json:
+    #         return tornado.escape.json_decode(user_json)
+    #     else:
+    #         return None
 
     def prepare(self):
         if self.request.headers.get('Content-Type', '').startswith('application/json'):
@@ -63,13 +66,13 @@ class BaseHandler(tornado.web.RequestHandler):
     #     """设置默认的响应报文中的header，默认返回json格式数据. 加上这个之后好像返回的数据有点固定"""
     #     self.set_header("Content-Type", "application/json; charset=UTF-8")
 
-    def data_received(self, chunk):
-        """Implement this method to handle streamed request data.
+    # def data_received(self, chunk):
+    #     """implement this method to handle streamed request data.
 
-        Requires the `.stream_request_body` decorator.
-        """
-        print('好像用不着这个方法', chunk)
-        return chunk
+    #     requires the `.stream_request_body` decorator.
+    #     """
+    #     print('好像用不着这个方法', chunk)
+    #     return chunk
 
 
 class PageNotFoundHandler(tornado.web.RequestHandler):

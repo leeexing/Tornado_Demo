@@ -11,8 +11,8 @@ SETTINGS = {
     'template_path': os.path.join(os.path.dirname(__file__), 'template'),
     'compiled_template_cache': False,
     'cookie_secret': '61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o',
-    'xsrf_cookies': True,
-    'login_url': 'login', # 有权限验证的路由没有通过验证会跳转到此路由下
+    # 'xsrf_cookies': True,
+    'login_url': '/login', # 有权限验证的路由没有通过验证会跳转到此路由下
 }
 
 # mysql配置
